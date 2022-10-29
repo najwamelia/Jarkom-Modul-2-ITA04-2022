@@ -94,7 +94,7 @@ Berhasil terhubung dengan internet
 Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder wise.
 
 #### Jawab
-Melakukan konfigurasi pada file `/etc/bind/named.conf.local`
+Pertama melakukan update package lists dan install aplikasi bind9 pada WISE. Kemudian, membuat konfigurasi doamin `wise.ita04.com` pada file `/etc/bind/named.conf.local` dan buat folder wise pada /etc/bind dengan command sebagai berikut:
 ##### Script wise.sh
 ```
 echo nameserver 192.168.122.1 > /etc/resolv.conf
@@ -109,7 +109,27 @@ zone \"wise.ita04.com\" {
 
 mkdir -p /etc/bind/wise
 ```
+Langkah selanjutnya, membuat konfigurasi domain menjadi www.ita04.com lalu membuat CNAME www untuk wise.ita04.com dengan cara melakukan konfigurasi pada file `/etc/bind/wise/wise.ita04.com`, command sebagai berikut:
+##### Script wise.sh
+```
+echo "
+;
+; BIND data file for local loopback interface
+;
+\$TTL    604800
+@       IN      SOA     wise.ita04.com. root.wise.ita04.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@               IN      NS      wise.ita04.com.
+@               IN      A       192.212.1.2
+www             IN      CNAME   wise.ita04.com.
+"> /etc/bind/wise/wise.ita04.com
+```
 
 ##### Testing
-Berhasil terhubung dengan internet
-![Foto](./img/2a.png)
+Berhasil mencoba ping ke `wise.ita04.com` dan `www.wise.ita04.com` serta mengecek CNAME dari `www.wise.ita04.com`
+![Foto](./img/2a.PNG)
