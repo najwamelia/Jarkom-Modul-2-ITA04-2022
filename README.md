@@ -80,9 +80,11 @@ Dalam script bash ostania.sh kami  memasukkan command
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.212.0.0/16
 cat /etc/resolv.conf
 ```
+
 Selanjutnya, di script node lainnya emasukkan command
 ```
 echo "nameserver 192.168.122.1" > /etc/resolv.conf
+```
 
 ##### Testing
 Berhasil terhubung dengan internet
