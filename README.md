@@ -325,7 +325,7 @@ www             IN      CNAME   operation.wise.ita04.com.
 ```
 
 #### Testing
-Di SSSS, kami melakukan ping pada `opperation.wise.ita04.com` dan juga `wwww.opperation.wise.ita04.com`
+Di SSSS, kami melakukan ping pada `operation.wise.ita04.com` dan juga `wwww.operation.wise.ita04.com`
 ![Foto](./img/6a.PNG)
 ![Foto](./img/6b.PNG)
 
@@ -356,3 +356,82 @@ www.strix       IN      CNAME   strix.operation.wise.ita04.com.
 Pada SSS, kami melakukan ping seperti berikut ini:
 ![Foto](./img/7a.PNG)
 
+
+## Soal 8
+Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pertama dengan webserver www.wise.yyy.com. Pertama, Loid membutuhkan webserver dengan DocumentRoot pada /var/www/wise.yyy.com.
+
+### Jawab
+Pertama melakukan install apache, php, openssl, dsb pada Eden:
+```
+apt-get install apache2 -y
+service apache2 start
+apt-get install php -y
+apt-get install libapache2-mod-php7.0 -y
+apt-get install ca-certificates openssl -y
+apt-get install apache2-utils -y
+```
+Serta melakukan update package dan instal lynx pada client SSS dan Garden.
+```
+apt-get update
+apt-get install dnsutils -y
+apt-get install lynx -y
+``` 
+Kemudian, membuat directory `wise.ita04.com` pada file `var/www/` dan dilakukan konfigurasi dari subdomain di `/etc/apache2/sites-available/wise.ita04.com.conf` sehingga DocumentRoot dari subdomain www.wise.yyy.com terletak di `/var/www/wise.ita04.com` sebagai berikut:
+```
+	ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/wise.ita04.com
+    ServerName wise.ita04.com
+    ServerAlias www.wise.ita04.com
+```
+#### Testing
+Mencoba lynx wise.ita04.com
+![Foto](./img/8a.PNG)
+
+
+## Soal 9
+Setelah itu, Loid juga membutuhkan agar url www.wise.yyy.com/index.php/home dapat menjadi www.wise.yyy.com/home.
+
+### Jawab
+Dilakukan dengan menambahkan sintaks berikut pada `/etc/apache2/sites-available/wise.ita04.com.conf` sehingga dari yang sebelumnya `/index.php/home` bisa langsung direct menjadi `/home`:
+#### Script eden.sh
+```
+Alias "/home" "/var/www/wise.ita04.com/index.php/home"
+```
+
+#### Testing
+Mengakses url `www.wise.ita04.com/home` dengan lynx
+![Foto](./img/9a.PNG)
+
+
+## Soal 10
+Setelah itu, pada subdomain www.eden.wise.yyy.com, Loid membutuhkan penyimpanan aset yang memiliki DocumentRoot pada `/var/www/eden.wise.yyy.com`.
+
+### Jawab
+Melakukan konfigurasi pada file `/etc/apache2/sites-available/wise.ita04.com.conf` seperti berikut:
+#### Script eden.sh
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.ita04.com
+        ServerName eden.wise.ita04.com
+        ServerAlias www.eden.wise.ita04.com
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Selanjutnya membuat directory `eden.wise.ita04.com` pada /var/www/ dan mengundul file zip dari google drive resource serta menyalinnya. Kemudian dengan command `a2ensite` mengaktifkan virtualhost:
+#### Script eden.sh
+```
+mkdir /var/www/eden.wise.ita01.com
+wget -c "https://drive.google.com/uc?export=download&id=1S0XhL9ViYN7TyCj2W66BNEXQD2AAAw2e"
+unzip /root/eden.wise.zip
+cp -r /root/eden.wise/. /var/www/eden.wise.ita01.com
+a2ensite eden.wise.ita01.com
+a2enmod rewrite
+service apache2 restart
+```
+
+#### Testing
+Berhasil mencoba lynx `eden.wise.ita04.com`
+![Foto](./img/10a.PNG)
