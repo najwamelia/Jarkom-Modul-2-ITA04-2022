@@ -161,7 +161,7 @@ www.eden        IN      CNAME   eden.wise.ita04.com.
 "> /etc/bind/wise/wise.ita04.com
 ```
 
-#####Testing
+##### Testing
 Me-restart service bind9 dan kemudian mencoba ping serta mengecek IPv4 address dari `eden.wise.ita04.com`
 ![Foto](./img/3a.PNG)
 
@@ -199,6 +199,6 @@ echo "
 " > /etc/bind/wise/1.212.192.in-addr.arpa
 ```
 
-#####Testing
+##### Testing
 Mengecek host yang ditunjuk dari reverse domain utama
 ![Foto](./img/4a.PNG)
