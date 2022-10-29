@@ -514,8 +514,6 @@ Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host 
 
 ### Jawab
 Dalam Eden dilakukan tambahan konfigurasi alias di `/etc/apache2/sites-available/eden.wise.ita04.com.conf` dengan command sebagai berikut:
-
-#### Script wise.sh
 ```
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
@@ -548,3 +546,96 @@ Dalam Eden dilakukan tambahan konfigurasi alias di `/etc/apache2/sites-available
 #### Testing
 Berhasil mencoba lynx `www.eden.wise.ita04.com/js`
 ![Foto](./img/13a.PNG)
+	
+
+## Soal 14
+Loid meminta agar www.strix.operation.wise.yyy.com hanya bisa diakses dengan port 15000 dan port 15500.
+
+### Jawab
+Dalam Eden dilakukan tambahan konfigurasi pada port 15000 dan 15500 di `/etc/apache2/sites-available/eden.wise.ita04.com.conf` dengan command sebagai berikut:
+
+```
+<VirtualHost *:15000>
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.ita04.com
+        ServerName strix.operation.wise.ita04.com
+        ServerAlias www.strix.operation.wise.ita04.com
+
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+<VirtualHost *:15500>        
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.ita04.com
+        ServerName strix.operation.wise.ita04.com
+        ServerAlias www.strix.operation.wise.ita04.com
+        
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Langkah selanjutnya, mengaktifkan dengan a2ensite, merestart apache2, dan membuat direktori baru:
+
+```
+a2ensite strix.operation.wise.ita04.com
+service apache2 restart
+mkdir /var/www/strix.operation.wise.ita04.com
+```
+
+#### Testing
+Mencoba lynx `strix.operation.wise.ita04.com:1500` dan `strix.operation.wise.ita04.com:15500`
+![Foto](./img/14a.PNG)
+![Foto](./img/14b.PNG)
+
+
+## Soal 15
+Dengan autentikasi username Twilight dan password opStrix dan file di /var/www/strix.operation.wise.yyy.
+
+### Jawab
+jawaban
+```
+this is where you write the syntax
+```
+
+#### Testing
+
+
+## Soal 16
+Setiap kali mengakses IP Eden akan dialihkan secara otomatis ke www.wise.yyy.com.
+
+### Jawab
+Menambahkan konfigurasi redirect 301 pada `/etc/apache2/sites-available/000-default.conf` dengan sintaks sebagai berikut:
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+        Redirect 301 / http://www.wise.ita04.com
+
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+#### Testing
+Berhasil mencoba lynx `192.212.1.2`
+![Foto](./img/16a.PNG)
+
+
+## Soal 17
+Karena website www.eden.wise.yyy.com semakin banyak pengunjung dan banyak modifikasi sehingga banyak gambar-gambar yang random, maka Loid ingin mengubah request gambar yang memiliki substring “eden” akan diarahkan menuju eden.png. Bantulah Agent Twilight dan Organisasi WISE menjaga perdamaian!.
+
+### Jawab
+Menambahkan konfigurasi rewriterule di .htaxxess pada direktori `/var/www/eden.wise.ita04.com/.htaccess` dengan sintaks sebagai berikut:
+```
+ErrorDocument 404 /error/404.html
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^public/images/.*eden.*$ public/images/eden.png [NC,L]
+```
+
+#### Testing
