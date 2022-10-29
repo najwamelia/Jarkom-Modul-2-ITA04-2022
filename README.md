@@ -93,7 +93,7 @@ echo "nameserver 192.168.122.1" > /etc/resolv.conf
 ```
 
 #### Testing
-Berhasil terhubung dengan internet
+Untuk melakukan testing, kita dapat menjalankan command `PING google.com`
 ![Foto](./img/1b.PNG)
 
 ## Soal 2
