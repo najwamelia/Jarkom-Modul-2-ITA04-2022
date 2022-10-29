@@ -97,7 +97,7 @@ Untuk melakukan testing, kita dapat menjalankan command `PING google.com`
 ![Foto](./img/1b.PNG)
 
 ## Soal 2
-Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder wise.
+Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder WISE.
 
 ### Jawab
 Pertama melakukan update package lists dan install aplikasi bind9 pada WISE. Kemudian, membuat konfigurasi doamin `wise.ita04.com` pada file `/etc/bind/named.conf.local` dan buat folder wise pada /etc/bind dengan command sebagai berikut:
@@ -243,16 +243,16 @@ zone \"wise.ita04.com\" {
 Setelah itu lakukan restart sevice bind9 dengan `service bind9 restart`
 
 #### Testing
-Pertama, kami memberhentikan service bind9 pada Wise menggunakan `service bind9 stop` kemudian melakukan ping pada SSS
+Pertama, kami memberhentikan service bind9 pada WISE menggunakan `service bind9 stop` kemudian melakukan ping pada SSS
 ![Foto](./img/5a.PNG)
 
 ## Soal 6
 Karena banyak informasi dari Handler, buatlah subdomain yang khusus untuk operation yaitu operation.wise.yyy.com dengan alias www.operation.wise.yyy.com yang didelegasikan dari WISE ke Berlint dengan IP menuju ke Eden dalam folder operation 
 
 ### Jawab
-Pertama kita harus ke Wise dahulu dimana kita akan mengkonfigurasikan wise.ita04.com di `/etc/bind/wise/wise.ita04.com`
+Pertama kita harus ke WISE dahulu dimana kita akan mengkonfigurasikan wise.ita04.com di `/etc/bind/wise/wise.ita04.com`
 
-#### Pada Wise
+#### Pada WISE
 ```
 $TTL    604800
 @       IN      SOA     wise.ita04.com. root.wise.ita04.com. (
