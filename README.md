@@ -12,12 +12,14 @@ Twilight (〈黄昏 (たそがれ) 〉, <Tasogare>) adalah seorang mata-mata yan
 
 WISE akan dijadikan sebagai DNS Master, Berlint akan dijadikan DNS Slave, dan Eden akan digunakan sebagai Web Server. Terdapat 2 Client yaitu SSS, dan Garden. Semua node terhubung pada router Ostania, sehingga dapat mengakses internet.
 
-#### Jawab
-Membuat Topologi pada GNS3 sebagai berikut:
+### Jawab
+Pertama-tama kita perlu membuat Topologi sesuai soal, Topologi yang telah kami buat adalah sebagai berikut :
+
 ![Foto](./img/1a.PNG)
 
-Dengan konfigurasi setiap node:
-##### Konfigurasi Ostania
+Setelah itu kita perlu melakukan konfigurasi pada setiap node, berikut adalah konfigurasi setiap node :
+
+#### Konfigurasi Ostania
 ```
 auto eth1
 iface eth1 inet static
@@ -35,7 +37,7 @@ iface eth3 inet static
 	netmask 255.255.255.0
 ```
 
-##### Konfigurasi SSS
+#### Konfigurasi SSS
 ```
 auto eth0
 iface eth0 inet static
@@ -44,7 +46,7 @@ iface eth0 inet static
 	gateway 192.212.2.1
 ```
 
-##### Konfigurasi Garden
+#### Konfigurasi Garden
 ```
 auto eth0
 iface eth0 inet static
@@ -53,7 +55,7 @@ iface eth0 inet static
 	gateway 192.212.2.1
 ```
 
-##### Konfigurasi WISE
+#### Konfigurasi WISE
 ```
 auto eth0
 iface eth0 inet static
@@ -62,7 +64,7 @@ iface eth0 inet static
     gateway 192.212.1.1
 ```
 
-##### Konfigurasi Berlint
+#### Konfigurasi Berlint
 ```
 auto eth0
 iface eth0 inet static
@@ -71,7 +73,7 @@ iface eth0 inet static
 	gateway 192.212.3.1
 ```
 
-##### Konfigurasi Eden
+#### Konfigurasi Eden
 ```
 auto eth0
 iface eth0 inet static
@@ -90,16 +92,16 @@ Selanjutnya, di script node lainnya emasukkan command
 echo "nameserver 192.168.122.1" > /etc/resolv.conf
 ```
 
-##### Testing
+#### Testing
 Berhasil terhubung dengan internet
 ![Foto](./img/1b.PNG)
 
 ## Soal 2
 Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder wise.
 
-#### Jawab
+### Jawab
 Pertama melakukan update package lists dan install aplikasi bind9 pada WISE. Kemudian, membuat konfigurasi doamin `wise.ita04.com` pada file `/etc/bind/named.conf.local` dan buat folder wise pada /etc/bind dengan command sebagai berikut:
-##### Script wise.sh
+#### Script wise.sh
 ```
 echo nameserver 192.168.122.1 > /etc/resolv.conf
 apt-get update -y
@@ -114,7 +116,7 @@ zone \"wise.ita04.com\" {
 mkdir -p /etc/bind/wise
 ```
 Langkah selanjutnya, membuat konfigurasi domain menjadi www.ita04.com lalu membuat CNAME www untuk wise.ita04.com dengan cara melakukan konfigurasi pada file `/etc/bind/wise/wise.ita04.com`, command sebagai berikut:
-##### Script wise.sh
+#### Script wise.sh
 ```
 echo "
 ;
@@ -134,16 +136,16 @@ www             IN      CNAME   wise.ita04.com.
 "> /etc/bind/wise/wise.ita04.com
 ```
 
-##### Testing
+#### Testing
 Berhasil mencoba ping ke `wise.ita04.com` dan `www.wise.ita04.com` serta mengecek CNAME dari `www.wise.ita04.com`
 ![Foto](./img/2a.PNG)
 
 ## Soal 3
 Setelah itu ia juga ingin membuat subdomain eden.wise.yyy.com dengan alias www.eden.wise.yyy.com yang diatur DNS-nya di WISE dan mengarah ke Eden.
 
-#### Jawab
+### Jawab
 Dilakukan dengan menambahkan konfigurasi pada file `/etc/bind/wise/wise.ita04.com`, command sebagai berikut:
-##### Script wise.sh
+#### Script wise.sh
 ```
 echo "
 ;
@@ -165,7 +167,7 @@ www.eden        IN      CNAME   eden.wise.ita04.com.
 "> /etc/bind/wise/wise.ita04.com
 ```
 
-##### Testing
+#### Testing
 Me-restart service bind9 dan kemudian mencoba ping serta mengecek IPv4 address dari `eden.wise.ita04.com`
 ![Foto](./img/3a.PNG)
 
@@ -175,9 +177,9 @@ Mencoba ping `www.eden.wise.ita04.com` serta cek alias dari `www.eden.wise.ita04
 ## Soal 4
 Buat reverse domain untuk domain utama.
 
-#### Jawab
+### Jawab
 Pertama, menambahkan konfigurasi pada file `/etc/bind/named.conf.local`, command sebagai berikut:
-##### Script wise.sh
+#### Script wise.sh
 ```
 zone \"1.212.192.in-addr.arpa\" {
 	type master;
@@ -203,16 +205,16 @@ echo "
 " > /etc/bind/wise/1.212.192.in-addr.arpa
 ```
 
-##### Testing
+#### Testing
 Mengecek host yang ditunjuk dari reverse domain utama
 ![Foto](./img/4a.PNG)
 
 ## Soal 5
 Agar dapat tetap dihubungi jika server WISE bermasalah, buatlah juga Berlint sebagai DNS Slave untuk domain utama 
 
-#### Jawab
+### Jawab
 Untuk menjadikan Berlint sebagai DNS Slave, kami melakukan konfigurasi pada `/etc/bind/named.conf.local` menjadi sebagai berikut:
-##### Pada Wise
+#### Pada Wise
 ```
 zone \"wise.ita04.com\" {
 	type master;
@@ -227,7 +229,7 @@ zone \"1.212.192.in-addr.arpa\" {
 	file \"/etc/bind/wise/1.212.192.in-addr.arpa\";
 };
 ```
-##### Pada Berlint
+#### Pada Berlint
 Melakukan `apt-get update` dan menginstall bind9 dengan cara `apt-get install bind9 -y` dikarenakan Berlint akan dijadikan DNS Slave
 
 Adapun konfigurasi pada file `/etc/bind/named.conf.local` sebagai berikut: 
@@ -240,17 +242,17 @@ zone \"wise.ita04.com\" {
 ```
 Setelah itu lakukan restart sevice bind9 dengan `service bind9 restart`
 
-##### Testing
+#### Testing
 Pertama, kami memberhentikan service bind9 pada Wise menggunakan `service bind9 stop` kemudian melakukan ping pada SSS
 ![Foto](./img/5a.PNG)
 
 ## Soal 6
 Karena banyak informasi dari Handler, buatlah subdomain yang khusus untuk operation yaitu operation.wise.yyy.com dengan alias www.operation.wise.yyy.com yang didelegasikan dari WISE ke Berlint dengan IP menuju ke Eden dalam folder operation 
 
-#### Jawab
+### Jawab
 Pertama kita harus ke Wise dahulu dimana kita akan mengkonfigurasikan wise.ita04.com di `/etc/bind/wise/wise.ita04.com`
 
-##### Pada Wise
+#### Pada Wise
 ```
 $TTL    604800
 @       IN      SOA     wise.ita04.com. root.wise.ita04.com. (
@@ -294,7 +296,7 @@ options {
 };
 ```
 
-##### Pada Berlint
+#### Pada Berlint
 Kami juga menambahkan zone pada file `/etc/bind/named.conf.local` pada Berlint untuk mendelegasikan `operation.wise.ita04.com`
 ```
 zone \"wise.ita04.com\" {
@@ -322,7 +324,7 @@ $TTL    604800
 www             IN      CNAME   operation.wise.ita04.com.
 ```
 
-##### Testing
+#### Testing
 Di SSSS, kami melakukan ping pada `opperation.wise.ita04.com` dan juga `wwww.opperation.wise.ita04.com`
 ![Foto](./img/6a.PNG)
 ![Foto](./img/6b.PNG)
@@ -330,10 +332,10 @@ Di SSSS, kami melakukan ping pada `opperation.wise.ita04.com` dan juga `wwww.opp
 ## Soal 7
 Untuk informasi yang lebih spesifik mengenai Operation Strix, buatlah subdomain melalui Berlint dengan akses `strix.operation.wise.yyy.com` dengan alias `www.strix.operation.wise.yyy.com` yang mengarah ke Eden
 
-#### Jawab
+### Jawab
 Pada soal ini kami hanya perlu menambahkan konfigurasi pada file `/etc/bind/operation/operation.wise.ita04.com` sehingga terlihat seperti berikut ini:
 
-##### Pada Berlint
+#### Pada Berlint
 ```
 $TTL    604800
 @       IN      SOA     operation.wise.ita04.com. root.operation.wise.ita04.com$
@@ -350,7 +352,7 @@ strix           IN      A       192.212.3.3
 www.strix       IN      CNAME   strix.operation.wise.ita04.com.
 ```
 
-##### Testing
+#### Testing
 Pada SSS, kami melakukan ping seperti berikut ini:
 ![Foto](./img/7a.PNG)
 
