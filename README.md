@@ -378,7 +378,7 @@ apt-get install lynx -y
 ``` 
 Kemudian, membuat directory `wise.ita04.com` pada file `var/www/` dan dilakukan konfigurasi dari subdomain di `/etc/apache2/sites-available/wise.ita04.com.conf` sehingga DocumentRoot dari subdomain www.wise.yyy.com terletak di `/var/www/wise.ita04.com` sebagai berikut:
 ```
-	ServerAdmin webmaster@localhost
+    ServerAdmin webmaster@localhost
     DocumentRoot /var/www/wise.ita04.com
     ServerName wise.ita04.com
     ServerAlias www.wise.ita04.com
@@ -435,3 +435,116 @@ service apache2 restart
 #### Testing
 Berhasil mencoba lynx `eden.wise.ita04.com`
 ![Foto](./img/10a.PNG)
+
+
+## Soal 11
+Akan tetapi, pada folder /public, Loid ingin hanya dapat melakukan directory listing saja.
+
+### Jawab
+Dalam Eden dilakukan konfigurasi di `/etc/apache2/sites-available/eden.wise.ita04.com.conf` dengan command sebagai berikut:
+
+#### Script eden.sh
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.ita04.com
+        ServerName eden.wise.ita04.com
+        ServerAlias www.eden.wise.ita04.com
+
+        <Directory /var/www/eden.wise.ita04.com/public>
+                Options +Indexes
+        </Directory>
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+        <Directory /var/www/wise.ita04.com>
+                Options +FollowSymLinks -Multiviews
+                AllowOverride All
+        </Directory>
+</VirtualHost>
+```
+
+#### Testing
+Berhasil melakukan lynx `www.eden.wise.ita04.com/public`
+![Foto](./img/11a.PNG)
+
+
+## Soal 12
+Tidak hanya itu, Loid juga ingin menyiapkan error file 404.html pada folder /error untuk mengganti error kode pada apache.
+
+### Jawab
+Dalam Eden ditambahkan ErrorDocument yang mengarah ke file `/error/404.html` pada konfigurasi di `/etc/apache2/sites-available/eden.wise.ita04.com.conf` dengan command sebagai berikut:
+
+#### Script eden.sh
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.ita04.com
+        ServerName eden.wise.ita04.com
+        ServerAlias www.eden.wise.ita04.com
+
+        ErrorDocument 404 /error/404.html
+        ErrorDocument 500 /error/404.html
+        ErrorDocument 502 /error/404.html
+        ErrorDocument 503 /error/404.html
+        ErrorDocument 504 /error/404.html
+
+        <Directory /var/www/eden.wise.ita04.com/public>
+                Options +Indexes
+        </Directory>
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+        <Directory /var/www/wise.ita04.com>
+                Options +FollowSymLinks -Multiviews
+                AllowOverride All
+        </Directory>
+</VirtualHost>
+```
+
+#### Testing
+Berhasil mencoba lynx `eden.wise.ita04.com/hahaha`
+![Foto](./img/12a.PNG)
+
+
+## Soal 13
+Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset www.eden.wise.yyy.com/public/js menjadi www.eden.wise.yyy.com/js.
+
+### Jawab
+Dalam Eden dilakukan tambahan konfigurasi alias di `/etc/apache2/sites-available/eden.wise.ita04.com.conf` dengan command sebagai berikut:
+
+#### Script wise.sh
+```
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.ita04.com
+        ServerName eden.wise.ita04.com
+        ServerAlias www.eden.wise.ita04.com
+
+        ErrorDocument 404 /error/404.html
+        ErrorDocument 500 /error/404.html
+        ErrorDocument 502 /error/404.html
+        ErrorDocument 503 /error/404.html
+        ErrorDocument 504 /error/404.html
+
+        <Directory /var/www/eden.wise.ita04.com/public>
+                Options +Indexes
+        </Directory>
+
+        Alias \"/js\" \"/var/www/eden.wise.ita04.com/public/js\"
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+        <Directory /var/www/wise.ita04.com>
+                Options +FollowSymLinks -Multiviews
+                AllowOverride All
+        </Directory>
+</VirtualHost>
+```
+
+#### Testing
+Berhasil mencoba lynx `www.eden.wise.ita04.com/js`
+![Foto](./img/13a.PNG)
