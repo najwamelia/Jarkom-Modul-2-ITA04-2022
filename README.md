@@ -10,7 +10,7 @@ WISE akan dijadikan sebagai DNS Master, Berlint akan dijadikan DNS Slave, dan Ed
 
 #### Jawab
 Membuat Topologi pada GNS3 sebagai berikut:
-![Foto](./img/1a.png)
+![Foto](./img/1a.PNG)
 
 Dengan konfigurasi setiap node:
 ##### Konfigurasi Ostania
@@ -86,7 +86,7 @@ echo "nameserver 192.168.122.1" > /etc/resolv.conf
 
 ##### Testing
 Berhasil terhubung dengan internet
-![Foto](./img/1b.png)
+![Foto](./img/1b.PNG)
 
 ## Soal 2
 Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder wise.
