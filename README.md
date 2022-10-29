@@ -133,3 +133,72 @@ www             IN      CNAME   wise.ita04.com.
 ##### Testing
 Berhasil mencoba ping ke `wise.ita04.com` dan `www.wise.ita04.com` serta mengecek CNAME dari `www.wise.ita04.com`
 ![Foto](./img/2a.PNG)
+
+## Soal 3
+Setelah itu ia juga ingin membuat subdomain eden.wise.yyy.com dengan alias www.eden.wise.yyy.com yang diatur DNS-nya di WISE dan mengarah ke Eden.
+
+#### Jawab
+Dilakukan dengan menambahkan konfigurasi pada file `/etc/bind/wise/wise.ita04.com`, command sebagai berikut:
+##### Script wise.sh
+```
+echo "
+;
+; BIND data file for local loopback interface
+;
+\$TTL    604800
+@       IN      SOA     wise.ita04.com. root.wise.ita04.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@               IN      NS      wise.ita04.com.
+@               IN      A       192.212.1.2
+www             IN      CNAME   wise.ita04.com.
+eden            IN      A       192.212.3.3
+www.eden        IN      CNAME   eden.wise.ita04.com.
+"> /etc/bind/wise/wise.ita04.com
+```
+
+#####Testing
+Me-restart service bind9 dan kemudian mencoba ping serta mengecek IPv4 address dari `eden.wise.ita04.com`
+![Foto](./img/3a.PNG)
+
+Mencoba ping `www.eden.wise.ita04.com` serta cek alias dari `www.eden.wise.ita04.com`
+![Foto](./img/3b.PNG)
+
+## Soal 4
+Buat reverse domain untuk domain utama.
+
+#### Jawab
+Pertama, menambahkan konfigurasi pada file `/etc/bind/named.conf.local`, command sebagai berikut:
+##### Script wise.sh
+```
+zone \"1.212.192.in-addr.arpa\" {
+	type master;
+	file \"/etc/bind/wise/1.212.192.in-addr.arpa\";
+};
+```
+Kemudian ditambahkan juga konfigurasi yang ada pada file `/etc/bind/wise/1.212.192.in-addr.arpa` seperti berikut:
+```
+echo "
+;
+; BIND data file for local loopback interface
+;
+\$TTL    604800
+@       IN      SOA     wise.ita04.com. root.wise.ita04.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+1.212.192.in-addr.arpa. IN      NS      wise.ita04.com.
+2                       IN      PTR     wise.ita04.com.
+" > /etc/bind/wise/1.212.192.in-addr.arpa
+```
+
+#####Testing
+Mengecek host yang ditunjuk dari reverse domain utama
+![Foto](./img/4a.PNG)
