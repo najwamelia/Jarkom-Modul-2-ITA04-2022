@@ -640,3 +640,4 @@ RewriteRule ^public/images/.*eden.*$ public/images/eden.png [NC,L]
 ```
 
 #### Testing
+![Foto](./img/17a.PNG)
