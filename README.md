@@ -386,6 +386,7 @@ Kemudian, membuat directory `wise.ita04.com` pada file `var/www/` dan dilakukan 
 #### Testing
 Mencoba lynx wise.ita04.com
 ![Foto](./img/8a.PNG)
+![Foto](./img/8b.PNG)
 
 
 ## Soal 9
@@ -401,7 +402,7 @@ Alias "/home" "/var/www/wise.ita04.com/index.php/home"
 #### Testing
 Mengakses url `www.wise.ita04.com/home` dengan lynx
 ![Foto](./img/9a.PNG)
-
+![Foto](./img/9b.PNG)
 
 ## Soal 10
 Setelah itu, pada subdomain www.eden.wise.yyy.com, Loid membutuhkan penyimpanan aset yang memiliki DocumentRoot pada `/var/www/eden.wise.yyy.com`.
