@@ -436,6 +436,7 @@ service apache2 restart
 #### Testing
 Berhasil mencoba lynx `eden.wise.ita04.com`
 ![Foto](./img/10a.PNG)
+![Foto](./img/10b.PNG)
 
 
 ## Soal 11
@@ -469,6 +470,8 @@ Dalam Eden dilakukan konfigurasi di `/etc/apache2/sites-available/eden.wise.ita0
 #### Testing
 Berhasil melakukan lynx `www.eden.wise.ita04.com/public`
 ![Foto](./img/11a.PNG)
+![Foto](./img/11b.PNG)
+
 
 
 ## Soal 12
@@ -508,6 +511,7 @@ Dalam Eden ditambahkan ErrorDocument yang mengarah ke file `/error/404.html` pad
 #### Testing
 Berhasil mencoba lynx `eden.wise.ita04.com/hahaha`
 ![Foto](./img/12a.PNG)
+![Foto](./img/12b.PNG)
 
 
 ## Soal 13
@@ -547,6 +551,7 @@ Dalam Eden dilakukan tambahan konfigurasi alias di `/etc/apache2/sites-available
 #### Testing
 Berhasil mencoba lynx `www.eden.wise.ita04.com/js`
 ![Foto](./img/13a.PNG)
+![Foto](./img/13b.PNG)
 	
 
 ## Soal 14
