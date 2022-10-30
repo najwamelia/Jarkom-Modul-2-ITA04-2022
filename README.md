@@ -593,21 +593,62 @@ mkdir /var/www/strix.operation.wise.ita04.com
 ```
 
 #### Testing
-Mencoba lynx `strix.operation.wise.ita04.com:1500` dan `strix.operation.wise.ita04.com:15500`
+Mencoba lynx `strix.operation.wise.ita04.com:15000`
 ![Foto](./img/14a.PNG)
 ![Foto](./img/14b.PNG)
-
+dan `strix.operation.wise.ita04.com:15500`
+![Foto](./img/14c.PNG)
+![Foto](./img/14d.PNG)
 
 ## Soal 15
 Dengan autentikasi username Twilight dan password opStrix dan file di /var/www/strix.operation.wise.yyy.
 
 ### Jawab
-jawaban
+Pertama, jalankan command `htpasswd -c -b /var/www/strix.operation.wise.ita04 Twilight opStrix
+` agar dapat menyimpan username dan password
+
+Kemudian kami menambahkan konfigurasi autentikasi pada konfigurasi virtual seperti berikut ini:
 ```
-this is where you write the syntax
+<VirtualHost *:15000>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.ita04.com
+        ServerName strix.operation.wise.ita04.com
+        ServerAlias www.strix.operation.wise.ita04.com
+        # nomor 15
+        <Directory \"/var/www/strix.operation.wise.ita04.com\">
+                AuthType Basic
+                AuthName \"Restricted Content\"
+                AuthUserFile /var/www/strix.operation.wise.ita04
+                Require valid-user
+        </Directory>
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+<VirtualHost *:15500>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.ita04.com
+        ServerName strix.operation.wise.ita04.com
+        ServerAlias www.strix.operation.wise.ita04.com
+        # nomor 15
+        <Directory \"/var/www/strix.operation.wise.ita04.com\">
+                AuthType Basic
+                AuthName \"Restricted Content\"
+                AuthUserFile /var/www/strix.operation.wise.ita04
+                Require valid-user
+        </Directory>
+
+        ErrorLog \${APACHE_LOG_DIR}/error.log
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
 ```
 
 #### Testing
+Mencoba lynx `strix.operation.wise.ita04.com:15000` lagi
+![Foto](./img/15a.PNG)
+![Foto](./img/15b.PNG)
+![Foto](./img/15c.PNG)
+![Foto](./img/15d.PNG)
 
 
 ## Soal 16
@@ -617,6 +658,7 @@ Setiap kali mengakses IP Eden akan dialihkan secara otomatis ke www.wise.yyy.com
 Menambahkan konfigurasi redirect 301 pada `/etc/apache2/sites-available/000-default.conf` dengan sintaks sebagai berikut:
 ```
 <VirtualHost *:80>
+        Redirect 301 / http://www.wise.ita04.com
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/html
         Redirect 301 / http://www.wise.ita04.com
@@ -630,7 +672,7 @@ Menambahkan konfigurasi redirect 301 pada `/etc/apache2/sites-available/000-defa
 #### Testing
 Berhasil mencoba lynx `192.212.1.2`
 ![Foto](./img/16a.PNG)
-
+![Foto](./img/16b.PNG)
 
 ## Soal 17
 Karena website www.eden.wise.yyy.com semakin banyak pengunjung dan banyak modifikasi sehingga banyak gambar-gambar yang random, maka Loid ingin mengubah request gambar yang memiliki substring “eden” akan diarahkan menuju eden.png. Bantulah Agent Twilight dan Organisasi WISE menjaga perdamaian!.
@@ -643,6 +685,17 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^public/images/.*eden.*$ public/images/eden.png [NC,L]
 ```
+Setelah itu kami juga menambahkan script berikut pada konfigurasi virtual host dari eden.wise.ita04.com
+```
+<Directory /var/www/eden.wise.ita04.com>
+        Options +FollowSymLinks -Multiviews
+        AllowOverride All
+</Directory>
+```
 
 #### Testing
+Mencoba `lynx eden.wise.ita04.com/edenlalala.png`
 ![Foto](./img/17a.PNG)
+![Foto](./img/17b.PNG)
+![Foto](./img/17c.PNG)
+![Foto](./img/17d.PNG)
